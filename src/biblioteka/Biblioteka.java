@@ -132,8 +132,8 @@ public class Biblioteka {
 						+ idKsiazka + ";");
 				prepStmt.execute();
 				System.out.println("Wypozyczyles ksiązke: "
-						+ aTInfo.getinfoTitle() + " - "
-						+ aTInfo.getinfoAutor() + "");
+						+ aTInfo.getinfoTitle() + " - " + aTInfo.getinfoAutor()
+						+ "");
 			} else {
 				System.out.println("Nie możesz wypozyczyc ksiąki: "
 						+ aTInfo.getinfoTitle()
