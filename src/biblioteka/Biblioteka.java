@@ -14,15 +14,18 @@ import model.Czytelnik;
 import model.Ksiazka;
 
 public class Biblioteka {
-
+	// sciezka do sterownika JDBC
 	public static final String DRIVER = "com.mysql.jdbc.Driver";
+	// sciezka do bazy danych
 	public static final String DB_URL = "jdbc:mysql://localhost:3306/biblioteka?useUnicode=yes&amp;characterEncoding=UTF-8";
-
+	// Interface, Połączenia (sesji) z konkretnej bazy danych
 	private Connection conn;
+	// Inteface wykorzystywany do wykonywania instrukcji SQL i zwracanie wyników
 	private Statement stat;
 
 	public Biblioteka() {
 		try {
+			// Załadowanie sterownika do systemu
 			Class.forName(Biblioteka.DRIVER);
 		} catch (ClassNotFoundException e) {
 			System.err.println("Brak starownika JDCB");
@@ -30,6 +33,7 @@ public class Biblioteka {
 		}
 
 		try {
+			// Połaczenie z baza danych sciazka, uzytkownik, haslo
 			conn = DriverManager.getConnection(DB_URL, "root", "");
 			stat = conn.createStatement();
 		} catch (SQLException e) {
@@ -59,6 +63,7 @@ public class Biblioteka {
 	public boolean insertCzytelnik(String imie, String nazwisko, String pesel,
 			int a) {
 		try {
+			// rozszerzenie Statemnt
 			PreparedStatement prepStmt = conn
 					.prepareStatement("insert into czytelnicy values ( " + a
 							+ ", ?, ?, ?);");
@@ -97,24 +102,20 @@ public class Biblioteka {
 	public boolean insertWypożycz(int idCzytelnik, int idKsiazka) {
 		try {
 			String readStatWyp = null;
-			String infoAutor = null;
-			String infoTitle = null;
-
 			// Zapytanie o sprawczenie czy ksizka jest juz wypozyczona
 			String sqlQueryStatWyp = "SELECT statWyp FROM `biblioteka`.`ksiazki` WHERE id_ksiazki="
 					+ idKsiazka + " AND statWyp ='Wypozyczona';";
 			// Zapytanie o Tytul i autora ksiazki po indexie ksiazki
 			String sqlQueryAutorTitle = "SELECT tytul, autor FROM `biblioteka`.`ksiazki` WHERE id_ksiazki="
 					+ idKsiazka + ";";
-
-			AutorTitleInfo aTInfo = new AutorTitleInfo(idCzytelnik, conn,
-					sqlQueryAutorTitle);
+			// Tworzenie obiektu klasy ktory sprawdza informacjie o ksiazce po
+			// idCzytelnika
+			AutorTitleInfo aTInfo = new AutorTitleInfo(conn, sqlQueryAutorTitle);
 
 			PreparedStatement pSStatWyp = conn
 					.prepareStatement(sqlQueryStatWyp);
 
 			ResultSet rs = pSStatWyp.executeQuery();
-			// ResultSet rs1 = pSAutorTitle.executeQuery();
 
 			PreparedStatement prepStmt = conn
 					.prepareStatement("insert into wypozyczenia values (NULL, ?, ?);");
@@ -123,7 +124,6 @@ public class Biblioteka {
 				readStatWyp = rs.getString("statWyp");
 				// System.out.println(userid);
 			}
-
 			if (readStatWyp == null) {
 				prepStmt.setInt(1, idCzytelnik);
 				prepStmt.setInt(2, idKsiazka);
@@ -132,7 +132,7 @@ public class Biblioteka {
 						+ idKsiazka + ";");
 				prepStmt.execute();
 				System.out.println("Wypozyczyles ksiązke: "
-						+ aTInfo.getinfoTitle() + " autorstwa: "
+						+ aTInfo.getinfoTitle() + " - "
 						+ aTInfo.getinfoAutor() + "");
 			} else {
 				System.out.println("Nie możesz wypozyczyc ksiąki: "
@@ -148,6 +148,8 @@ public class Biblioteka {
 
 	}
 
+	// Zsracanie ksiazki/ zmiana statusu ksiazki na dostepna/ usuwanie
+	// czytelnika z tabeli wypozyczone
 	public boolean returnWypożycz(int idCzytelnik, int idKsiazka) {
 		try {
 			String sqlQueryReturnBook = "UPDATE ksiazki SET statWyp='Dostepna' WHERE id_ksiazki="
@@ -213,9 +215,8 @@ public class Biblioteka {
 		return ksiazki;
 	}
 
+	// Wykaz ksiazek czyteknikas
 	public void pokazMojeWypozyczoneKsiazki(int idCzytelnik) {
-		String infoAutor = null;
-		String infoTitle = null;
 		int rentBooks;
 		// Zapytanie o wypozyczone ksiazki przez czytelnia o podanym indexie
 		String sqlQueryMyRentBook = "SELECT * FROM `biblioteka`.`wypozyczenia` WHERE id_czytelnika="
@@ -234,7 +235,7 @@ public class Biblioteka {
 						+ rentBooks + ";";
 				//
 				// Zapytanie o Tytul i autora ksiazki po indexie ksiazki
-				AutorTitleInfo aTInfo = new AutorTitleInfo(idCzytelnik, conn,
+				AutorTitleInfo aTInfo = new AutorTitleInfo(conn,
 						sqlQueryAutorTitle);
 				System.out.println(aTInfo.getinfoTitle() + " - "
 						+ aTInfo.getinfoAutor());

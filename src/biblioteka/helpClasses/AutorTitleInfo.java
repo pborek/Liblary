@@ -8,10 +8,8 @@ import java.sql.SQLException;
 public class AutorTitleInfo {
 	private String infoAutor = null;
 	private String infoTitle = null;
-	private int rentBooks;
 
-	public AutorTitleInfo(int idCzytelnik, Connection conn,
-			String sqlQueryAutorTitle) {
+	public AutorTitleInfo(Connection conn, String sqlQueryAutorTitle) {
 
 		PreparedStatement pSAutorTitle;
 		try {

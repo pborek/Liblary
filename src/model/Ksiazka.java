@@ -1,7 +1,5 @@
 package model;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 public class Ksiazka {
 
 	private int id;
@@ -53,7 +51,7 @@ public class Ksiazka {
 
 	@Override
 	public String toString() {
-		return "[" + id + "] - " + tytul + " - " + autor+" - " +statWyp;
+		return "[" + id + "] - " + tytul + " - " + autor + " - " + statWyp;
 	}
 
 }
