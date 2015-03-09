@@ -112,8 +112,6 @@ public class Biblioteka {
 
 			PreparedStatement pSStatWyp = conn
 					.prepareStatement(sqlQueryStatWyp);
-			// PreparedStatement pSAutorTitle = conn
-			// .prepareStatement(sqlQueryAutorTitle);
 
 			ResultSet rs = pSStatWyp.executeQuery();
 			// ResultSet rs1 = pSAutorTitle.executeQuery();
@@ -125,11 +123,6 @@ public class Biblioteka {
 				readStatWyp = rs.getString("statWyp");
 				// System.out.println(userid);
 			}
-			// while (rs1.next()) {
-			// infoTitle = rs1.getString("tytul");
-			// infoAutor = rs1.getString("autor");
-			// // System.out.println(userid);
-			// }
 
 			if (readStatWyp == null) {
 				prepStmt.setInt(1, idCzytelnik);
@@ -142,7 +135,8 @@ public class Biblioteka {
 						+ aTInfo.getinfoTitle() + " autorstwa: "
 						+ aTInfo.getinfoAutor() + "");
 			} else {
-				System.out.println("Nie możesz wypozyczyc ksiąki: " + aTInfo.getinfoTitle()
+				System.out.println("Nie możesz wypozyczyc ksiąki: "
+						+ aTInfo.getinfoTitle()
 						+ " ksiazka jest juz wypozyczona");
 			}
 		} catch (SQLException e) {
@@ -244,20 +238,6 @@ public class Biblioteka {
 						sqlQueryAutorTitle);
 				System.out.println(aTInfo.getinfoTitle() + " - "
 						+ aTInfo.getinfoAutor());
-				// String sqlQueryAutorTitle =
-				// "SELECT tytul, autor FROM `biblioteka`.`ksiazki` WHERE id_ksiazki="
-				// + rentBooks + ";";
-				//
-				//
-				// PreparedStatement pSAutorTitle = conn
-				// .prepareStatement(sqlQueryAutorTitle);
-				//
-				// ResultSet rs1 = pSAutorTitle.executeQuery();
-				// while (rs1.next()) {
-				// infoTitle = rs1.getString("tytul");
-				// infoAutor = rs1.getString("autor");
-				// System.out.println(infoTitle+" - "+infoAutor);
-				// }
 
 			}
 
