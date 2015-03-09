@@ -216,8 +216,9 @@ public class Biblioteka {
 	}
 
 	// Wykaz ksiazek czyteknikas
-	public void pokazMojeWypozyczoneKsiazki(int idCzytelnik) {
+	public List<String> pokazMojeWypozyczoneKsiazki(int idCzytelnik) {
 		int rentBooks;
+		List<String> listaMoichKsiazek = new LinkedList<String>();
 		// Zapytanie o wypozyczone ksiazki przez czytelnia o podanym indexie
 		String sqlQueryMyRentBook = "SELECT * FROM `biblioteka`.`wypozyczenia` WHERE id_czytelnika="
 				+ idCzytelnik + ";";
@@ -237,8 +238,10 @@ public class Biblioteka {
 				// Zapytanie o Tytul i autora ksiazki po indexie ksiazki
 				AutorTitleInfo aTInfo = new AutorTitleInfo(conn,
 						sqlQueryAutorTitle);
-				System.out.println(aTInfo.getinfoTitle() + " - "
+				listaMoichKsiazek.add(aTInfo.getinfoTitle() + " - "
 						+ aTInfo.getinfoAutor());
+				// System.out.println(aTInfo.getinfoTitle() + " - "
+				// + aTInfo.getinfoAutor());
 
 			}
 
@@ -246,6 +249,7 @@ public class Biblioteka {
 			System.err.println("Blad przy sprawdzaniu wypozyczonych ksiażek");
 			e.printStackTrace();
 		}
+		return listaMoichKsiazek;
 
 	}
 
